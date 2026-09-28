@@ -1,0 +1,17 @@
+{
+  "name": "bombay-bites-cafe",
+  "version": "1.0.0",
+  "description": "Bombay Bites - Café Ordering System (Electron + Supabase)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^latest"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^latest"
+  }
+}

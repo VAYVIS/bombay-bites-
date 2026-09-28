@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bombay Bites - Café Food Ordering System</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/landing.css" />
+<style>
+.land-nav { justify-content: space-between; gap: 24px; }
+.nav-brand { font-weight: 800; font-size: 20px; color: var(--l-ink); text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.nav-links a {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  color: var(--l-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.nav-links a:hover,
+.nav-links a.active { background: var(--l-chip); border-color: var(--l-card-border); }
+
+.hero-chips a {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--l-chip);
+  border: 1px solid var(--l-card-border);
+  backdrop-filter: blur(8px);
+  color: var(--l-ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+.hero-chips a:hover { transform: translateY(-2px); background: var(--l-accent); color: #fff; }
+
+.nav-brand:focus-visible,
+.nav-links a:focus-visible,
+.hero-chips a:focus-visible,
+.land-btn:focus-visible { outline: 3px solid var(--l-accent); outline-offset: 2px; }
+
+@media (max-width: 700px) {
+  .land-nav { flex-direction: column; gap: 12px; }
+  .nav-right { justify-content: center; }
+}
+</style>
+<script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+</script>
+</head>
+<body class="landing">
+
+<!-- animated background -->
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+<div class="floaters" aria-hidden="true">
+<span>🍛</span><span>☕</span><span>🥪</span><span>🍰</span><span>🫓</span>
+</div>
+
+<div id="site-nav"></div>
+
+<main class="land-hero">
+
+<!-- LEFT: project name + description -->
+<section class="hero-left">
+<p class="eyebrow">☕ Café Food Ordering System</p>
+
+<h1 class="hero-title brand-font" aria-label="Bombay Bites">
+<span class="line"><span class="word w1">Bombay</span></span>
+<span class="line"><span class="word w2">Bites</span></span>
+</h1>
+
+<p class="hero-tagline">Zaika from the streets of Bombay, delivered to your desktop.</p>
+
+<p class="hero-rotator">Now serving: <span id="rotator" class="swap">Vada Pav</span></p>
+
+<p class="hero-desc">
+  A desktop app for café staff to manage the menu, take table orders,
+  generate GST bills and track the day's revenue, all in one place.
+</p>
+
+<div class="hero-chips">
+  <a href="menu.html">🍽️ Menu</a>
+  <a href="orders.html">🧾 Orders</a>
+  <a href="billing.html">💳 Billing</a>
+  <a href="dashboard.html">📊 Dashboard</a>
+</div>
+</section>
+
+<!-- RIGHT: Sign In / Sign Up -->
+<section class="hero-right">
+<div class="auth-card">
+<h2 class="brand-font">Get started</h2>
+<p class="auth-sub">Sign in to your café dashboard or create a new staff account.</p>
+
+<a href="login.html" class="land-btn primary-grad">Sign In</a>
+<a href="signup.html" class="land-btn ghost">Sign Up</a>
+
+<small class="auth-foot">Built with Electron.js × Supabase</small>
+</div>
+</section>
+
+</main>
+<script src="js/nav.js"></script>
+<script>
+const foods = ['Vada Pav', 'Masala Chai', 'Bun Maska', 'Pav Bhaji', 'Misal Pav', 'Cutting Chai', 'Bombay Sandwich'];
+const rot = document.getElementById('rotator');
+let idx = 0;
+setInterval(() => {
+  idx = (idx + 1) % foods.length;
+  rot.classList.remove('swap');
+  void rot.offsetWidth;
+  rot.textContent = foods[idx];
+  rot.classList.add('swap');
+}, 2200);
+</script>
+</body>
+</html>

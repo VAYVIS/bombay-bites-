@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dashboard - Bombay Bites</title>
+<link rel="stylesheet" href="css/style.css" />
+<script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+</script>
+</head>
+<body>
+
+<div class="app-layout">
+<!-- SIDEBAR (shared) -->
+<aside class="sidebar" id="sidebar"></aside>
+<script src="js/sidebar.js"></script>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+<nav class="navbar">
+<div class="brand-font" style="font-size:18px;">Dashboard</div>
+<div style="display:flex; align-items:center; gap:16px;">
+<span id="userEmail" class="text-muted" style="font-size:13px;"></span>
+<button id="themeToggle" class="theme-toggle">🌙</button>
+</div>
+</nav>
+
+<div class="content-area">
+<h1 class="brand-font" style="margin-bottom: 24px;">Welcome back 👋</h1>
+
+<div id="statsGrid" class="stats-grid">
+<div class="card stat-card">
+<p class="text-muted">Total Orders</p>
+<h2 id="statTotalOrders">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Pending Orders</p>
+<h2 id="statPendingOrders">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Menu Items</p>
+<h2 id="statMenuItems">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Today's Revenue</p>
+<h2 id="statRevenue">—</h2>
+</div>
+</div>
+
+<div class="card" style="margin-top: 24px;">
+<h3 style="margin-bottom:16px;">Recent Orders</h3>
+<div id="recentOrdersList">
+<p class="text-muted">Loading...</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

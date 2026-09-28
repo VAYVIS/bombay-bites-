@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Billing - Bombay Bites</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/billing.css" />
+<script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+</script>
+</head>
+<body>
+
+<div class="app-layout">
+<!-- SIDEBAR (shared) -->
+<aside class="sidebar" id="sidebar"></aside>
+<script src="js/sidebar.js"></script>
+
+<div class="main-content">
+<nav class="navbar">
+<div class="brand-font" style="font-size:18px;">Billing</div>
+<div style="display:flex; align-items:center; gap:16px;">
+<span id="userEmail" class="text-muted" style="font-size:13px;"></span>
+<button id="themeToggle" class="theme-toggle">🌙</button>
+</div>
+</nav>
+
+<div class="content-area">
+<h1 class="brand-font" style="margin-bottom: 24px;">Bills &amp; Payments</h1>
+
+<div id="billingError" class="error-msg" style="display:none;"></div>
+
+<div class="stats-grid">
+<div class="card stat-card">
+<p class="text-muted">Today's Revenue</p>
+<h2 id="statToday">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Total Revenue</p>
+<h2 id="statTotal">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Bills Paid</p>
+<h2 id="statCount">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Average Bill</p>
+<h2 id="statAverage">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Awaiting Payment</p>
+<h2 id="statUnpaid">—</h2>
+</div>
+</div>
+
+<div class="card" style="margin-top: 24px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
+<h3>Paid Bills</h3>
+<select id="methodFilter" style="width:auto; margin:0; padding:8px 12px;">
+<option value="all">All payment methods</option>
+<option value="cash">Cash</option>
+<option value="upi">UPI</option>
+<option value="card">Card</option>
+</select>
+</div>
+
+<div class="table-wrap">
+<table class="bill-table">
+<thead>
+<tr>
+<th>Bill No</th>
+<th>Customer</th>
+<th>Table</th>
+<th>Method</th>
+<th>Paid On</th>
+<th style="text-align:right;">Amount</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="billsBody">
+<tr><td colspan="7" class="text-muted">Loading bills...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/billing.js"></script>
+</body>
+</html>

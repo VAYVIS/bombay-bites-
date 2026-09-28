@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Checkout - Bombay Bites</title>
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/billing.css" />
+<script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+</script>
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="logo brand-font" style="padding: 0 20px 24px;">🍛 Bombay Bites</div>
+    <nav class="sidebar-links">
+      <a href="dashboard.html">📊 Dashboard</a>
+      <a href="menu.html">🍽️ Menu</a>
+      <a href="orders.html" class="active">🧾 Orders</a>
+      <a href="billing.html">💳 Billing</a>
+    </nav>
+    <button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
+  </aside>
+
+  <div class="main-content">
+    <nav class="navbar">
+      <div class="brand-font" style="font-size:18px;">Checkout</div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <span id="userEmail" class="text-muted" style="font-size:13px;"></span>
+        <button id="themeToggle" class="theme-toggle">🌙</button>
+      </div>
+    </nav>
+
+    <div class="content-area">
+      <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h1 class="brand-font">Checkout &amp; Bill</h1>
+        <a href="orders.html" class="btn btn-outline" style="text-decoration:none;">← Back to Orders</a>
+      </div>
+
+      <div id="checkoutError" class="error-msg" style="display:none;"></div>
+
+      <div id="checkoutLayout" class="checkout-layout">
+
+        <!-- RECEIPT -->
+        <div id="receipt" class="card receipt">
+          <div class="receipt-head">
+            <h2 class="brand-font">🍛 Bombay Bites</h2>
+            <div class="text-muted">Zaika from the streets of Bombay</div>
+            <div id="paidStamp" class="paid-stamp" style="display:none;">PAID</div>
+          </div>
+
+          <div class="receipt-meta">
+            <div><span class="text-muted">Bill No</span><strong id="billNo">-</strong></div>
+            <div><span class="text-muted">Date</span><strong id="billDate">-</strong></div>
+            <div><span class="text-muted">Customer</span><strong id="billCustomer">-</strong></div>
+            <div><span class="text-muted">Table</span><strong id="billTable">-</strong></div>
+            <div id="billMethodWrap" style="display:none;">
+              <span class="text-muted">Paid via</span><strong id="billMethod"></strong>
+            </div>
+          </div>
+
+          <div id="billItems" class="receipt-items">
+            <p class="text-muted">Loading bill...</p>
+          </div>
+
+          <div class="receipt-totals">
+            <div class="row"><span>Subtotal</span><span id="billSubtotal">₹0.00</span></div>
+            <div class="row"><span>Discount</span><span id="billDiscount">−₹0.00</span></div>
+            <div class="row"><span id="billTaxLabel">GST</span><span id="billTax">₹0.00</span></div>
+            <div class="row grand"><span>Grand Total</span><span id="billTotal">₹0.00</span></div>
+          </div>
+
+          <div class="receipt-foot">Thank you! Visit again 🙏</div>
+        </div>
+
+        <!-- PAYMENT PANEL -->
+        <div id="paymentPanel" class="card payment-panel no-print" style="display:none;">
+          <h3 class="brand-font">Payment</h3>
+
+          <div id="payError" class="error-msg" style="display:none;"></div>
+
+          <label for="discountPct">Discount (%)</label>
+          <input type="number" id="discountPct" min="0" max="100" step="1" value="0" />
+
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod">
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="card">Card</option>
+          </select>
+
+          <div id="cashFields">
+            <label for="cashReceived">Cash Received (₹)</label>
+            <input type="number" id="cashReceived" min="0" step="0.01" placeholder="e.g. 500" />
+            <div id="changeDue" class="change-due"></div>
+          </div>
+
+          <button id="confirmPayBtn" class="btn btn-primary" style="width:100%;">Confirm Payment</button>
+        </div>
+      </div>
+
+      <!-- shown after payment -->
+      <div id="paidActions" class="paid-actions no-print" style="display:none;">
+        <button id="printBtn" class="btn btn-primary">🖨️ Print Receipt</button>
+        <a href="billing.html" class="btn btn-outline">Billing History</a>
+        <a href="orders.html" class="btn btn-outline">Back to Orders</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/checkout.js"></script>
+</body>
+</html>

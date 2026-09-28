@@ -1,0 +1,80 @@
+/* login.css — additions for the Sign In page only.
+   Load order: style.css -> landing.css -> login.css */
+
+.login-page .land-nav { justify-content: space-between; }
+
+.login-stage {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 24px 56px;
+}
+
+/* landing slides its card in from the right; a centred form just fades up */
+.login-card {
+  animation: fadeUp 0.7s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.login-title { text-align: center; color: var(--l-ink); }
+.login-page .auth-sub { text-align: center; }
+.login-page .auth-foot a { color: var(--l-accent); font-weight: 700; }
+.login-page .auth-foot a:hover { text-decoration: underline; }
+
+.login-card label { color: var(--l-muted); font-weight: 600; }
+.login-card input {
+  padding: 13px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--l-card-border);
+  background: var(--l-chip);
+  color: var(--l-ink);
+  backdrop-filter: blur(6px);
+}
+.login-card input::placeholder { color: var(--l-muted); opacity: 0.7; }
+.login-card input:focus {
+  border-color: #ee7c31;
+  box-shadow: 0 0 0 4px rgba(238, 124, 49, 0.25);
+  transform: none;
+}
+
+.pw-wrap { position: relative; margin-bottom: 14px; }
+.pw-wrap input { margin-bottom: 0; padding-right: 46px; }
+.pw-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.pw-toggle:hover { background: rgba(128, 128, 128, 0.18); }
+.pw-toggle:focus-visible { outline: 2px solid #ee7c31; outline-offset: 2px; }
+
+.login-submit { width: 100%; margin-top: 6px; font-family: inherit; }
+.login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-card .error-msg {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(192, 57, 43, 0.12);
+  border: 1px solid rgba(192, 57, 43, 0.3);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .login-card { padding: 30px 22px; }
+}

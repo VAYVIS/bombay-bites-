@@ -1,0 +1,5 @@
+
+const SUPABASE_URL = 'https://rjagdirzkovjjchianli.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqYWdkaXJ6a292ampjaGlhbmxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MjYyODMsImV4cCI6MjEwNjEwMjI4M30.q9LDpKDajhdzrGn2Rmnd0J5LaIYPndCRsPeb32K2bJs';
+
+export const supabase = window.supabase.createClient('https://rjagdirzkovjjchianli.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqYWdkaXJ6a292ampjaGlhbmxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MjYyODMsImV4cCI6MjEwNjEwMjI4M30.q9LDpKDajhdzrGn2Rmnd0J5LaIYPndCRsPeb32K2bJs');

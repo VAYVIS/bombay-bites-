@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Orders - Bombay Bites</title>
+<link rel="stylesheet" href="css/style.css" />
+<script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+</script>
+</head>
+<body>
+
+<div class="app-layout">
+<!-- SIDEBAR (shared) -->
+<aside class="sidebar" id="sidebar"></aside>
+<script src="js/sidebar.js"></script>
+
+<div class="main-content">
+<nav class="navbar">
+<div class="brand-font" style="font-size:18px;">Orders</div>
+<div style="display:flex; align-items:center; gap:16px;">
+<span id="userEmail" class="text-muted" style="font-size:13px;"></span>
+<button id="themeToggle" class="theme-toggle">🌙</button>
+</div>
+</nav>
+
+<div class="content-area">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+<h1 class="brand-font">Orders</h1>
+<button id="openAddModal" class="btn btn-primary">+ New Order</button>
+</div>
+
+<div id="ordersError" class="error-msg" style="display:none;"></div>
+
+<div id="ordersList">
+<p class="text-muted">Loading orders...</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- NEW ORDER MODAL -->
+<div id="orderModal" class="modal-overlay" style="display:none;">
+<div class="card modal-box">
+<h2 class="brand-font" style="margin-bottom:20px;">New Order</h2>
+
+<div id="modalError" class="error-msg" style="display:none;"></div>
+
+<form id="orderForm">
+<label for="customerName">Customer Name</label>
+<input type="text" id="customerName" required placeholder="e.g. Aditi Mehta" />
+
+<label for="tableNumber">Table Number</label>
+<input type="text" id="tableNumber" placeholder="e.g. T4" />
+
+<p class="text-muted" style="margin-bottom:16px; font-size:13px;">
+          You'll add items on the next screen after creating the order.
+</p>
+
+<div style="display:flex; gap:12px;">
+<button type="submit" class="btn btn-primary" id="saveOrderBtn" style="flex:1;">Create Order</button>
+<button type="button" id="closeOrderModal" class="btn btn-outline" style="flex:1;">Cancel</button>
+</div>
+</form>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/orders.js"></script>
+</body>
+</html>
