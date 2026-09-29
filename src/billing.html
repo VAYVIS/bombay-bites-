@@ -12,21 +12,15 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <body>
 
 <div class="app-layout">
-<aside class="sidebar">
-<div class="logo brand-font" style="padding: 0 20px 24px;">🍛 Bombay Bites</div>
-<nav class="sidebar-links">
-<a href="dashboard.html">📊 Dashboard</a>
-<a href="menu.html">🍽️ Menu</a>
-<a href="orders.html">🧾 Orders</a>
-<a href="billing.html" class="active">📄 Billing</a>
-<a href="profile.html">👤 Profile</a>
-</nav>
-<button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
-</aside>
+<aside class="sidebar" id="sidebar"></aside>
+<script type="module" src="js/sidebar.js"></script>
 
 <div class="main-content">
 <nav class="navbar">
+<div style="display:flex; align-items:center; gap:10px;">
+<button id="sidebarHamburger" class="sidebar-hamburger" aria-label="Open menu">☰</button>
 <div class="brand-font" style="font-size:18px;">Billing</div>
+</div>
 <div style="display:flex; align-items:center; gap:16px;">
 <span id="userEmail" class="text-muted" style="font-size:13px;"></span>
 <button id="themeToggle" class="theme-toggle">🌙</button>
@@ -65,7 +59,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
 <h3>Paid Bills</h3>
 <div style="display:flex; gap:10px; flex-wrap:wrap;">
-<input type="text" id="billSearch" placeholder="🔍 Search by customer, table, staff or bill no..." style="margin:0; width:280px;" />
+<input type="text" id="billSearch" placeholder="🔍 Search by customer, table or bill no..." style="margin:0; width:260px;" />
 <select id="methodFilter" style="width:auto; margin:0; padding:8px 12px;">
 <option value="all">All payment methods</option>
 <option value="cash">Cash</option>
@@ -82,7 +76,6 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <th>Bill No</th>
 <th>Customer</th>
 <th>Table</th>
-<th>Staff</th>
 <th>Method</th>
 <th>Paid On</th>
 <th style="text-align:right;">Amount</th>
@@ -90,7 +83,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </tr>
 </thead>
 <tbody id="billsBody">
-<tr><td colspan="8" class="text-muted">Loading bills...</td></tr>
+<tr><td colspan="7" class="text-muted">Loading bills...</td></tr>
 </tbody>
 </table>
 </div>

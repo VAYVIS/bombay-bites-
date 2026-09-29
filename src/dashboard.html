@@ -11,23 +11,17 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <body>
 
 <div class="app-layout">
-<!-- SIDEBAR -->
-<aside class="sidebar">
-<div class="logo brand-font" style="padding: 0 20px 24px;">🍛 Bombay Bites</div>
-<nav class="sidebar-links">
-<a href="dashboard.html" class="active">📊 Dashboard</a>
-<a href="menu.html">🍽️ Menu</a>
-<a href="orders.html">🧾 Orders</a>
-<a href="billing.html">📄 Billing</a>
-<a href="profile.html">👤 Profile</a>
-</nav>
-<button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
-</aside>
+<!-- SIDEBAR (shared) -->
+<aside class="sidebar" id="sidebar"></aside>
+<script type="module" src="js/sidebar.js"></script>
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
 <nav class="navbar">
+<div style="display:flex; align-items:center; gap:10px;">
+<button id="sidebarHamburger" class="sidebar-hamburger" aria-label="Open menu">☰</button>
 <div class="brand-font" style="font-size:18px;">Dashboard</div>
+</div>
 <div style="display:flex; align-items:center; gap:16px;">
 <span id="userEmail" class="text-muted" style="font-size:13px;"></span>
 <button id="themeToggle" class="theme-toggle">🌙</button>
@@ -35,7 +29,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </nav>
 
 <div class="content-area">
-<h1 class="brand-font" style="margin-bottom: 24px;"><span class="heading-line"><span class="page-heading">Welcome back 👋</span></span></h1>
+<h1 class="brand-font" style="margin-bottom: 24px;">Welcome back 👋</h1>
 
 <div id="statsGrid" class="stats-grid">
 <div class="card stat-card">

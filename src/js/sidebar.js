@@ -36,4 +36,24 @@ import { supabase } from './supabaseClient.js';
     <nav class="sidebar-links">${items}</nav>
     <button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
   `;
+
+  // ---- mobile hamburger + backdrop (drawer behaviour on narrow screens) ----
+  const backdrop = document.createElement('div');
+  backdrop.className = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+
+  const hamburger = document.getElementById('sidebarHamburger');
+
+  function openSidebar() {
+    sidebar.classList.add('sidebar-open');
+    backdrop.classList.add('visible');
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('sidebar-open');
+    backdrop.classList.remove('visible');
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openSidebar);
+  backdrop.addEventListener('click', closeSidebar);
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSidebar));
 })();

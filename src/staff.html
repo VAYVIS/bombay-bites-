@@ -16,7 +16,10 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 
 <div class="main-content">
 <nav class="navbar">
+<div style="display:flex; align-items:center; gap:10px;">
+<button id="sidebarHamburger" class="sidebar-hamburger" aria-label="Open menu">☰</button>
 <div class="brand-font" style="font-size:18px;">Staff Management</div>
+</div>
 <div style="display:flex; align-items:center; gap:16px;">
 <span id="userEmail" class="text-muted" style="font-size:13px;"></span>
 <button id="themeToggle" class="theme-toggle">🌙</button>
