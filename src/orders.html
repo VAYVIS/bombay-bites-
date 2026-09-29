@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Orders - Bombay Bites</title>
 <link rel="stylesheet" href="css/style.css" />
 <script>
@@ -11,8 +12,9 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <body>
 
 <div class="app-layout">
+<!-- SIDEBAR (shared) -->
 <aside class="sidebar" id="sidebar"></aside>
-<script type="module" src="js/sidebar.js"></script>
+<script src="js/sidebar.js"></script>
 
 <div class="main-content">
 <nav class="navbar">
@@ -27,12 +29,10 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </nav>
 
 <div class="content-area">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-<h1 class="brand-font"><span class="heading-line"><span class="page-heading">Orders</span></span></h1>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+<h1 class="brand-font">Orders</h1>
 <button id="openAddModal" class="btn btn-primary">+ New Order</button>
 </div>
-
-<input type="text" id="orderSearch" placeholder="🔍 Search by customer or table number..." style="margin-bottom:20px;" />
 
 <div id="ordersError" class="error-msg" style="display:none;"></div>
 
@@ -72,6 +72,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/mobile-nav.js"></script>
 <script type="module" src="js/orders.js"></script>
 </body>
 </html>

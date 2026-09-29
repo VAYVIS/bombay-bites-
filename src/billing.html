@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Billing - Bombay Bites</title>
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/billing.css" />
@@ -12,8 +13,9 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <body>
 
 <div class="app-layout">
+<!-- SIDEBAR (shared) -->
 <aside class="sidebar" id="sidebar"></aside>
-<script type="module" src="js/sidebar.js"></script>
+<script src="js/sidebar.js"></script>
 
 <div class="main-content">
 <nav class="navbar">
@@ -28,7 +30,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </nav>
 
 <div class="content-area">
-<h1 class="brand-font" style="margin-bottom: 24px;"><span class="heading-line"><span class="page-heading">Bills &amp; Payments</span></span></h1>
+<h1 class="brand-font" style="margin-bottom: 24px;">Bills &amp; Payments</h1>
 
 <div id="billingError" class="error-msg" style="display:none;"></div>
 
@@ -58,15 +60,12 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <div class="card" style="margin-top: 24px;">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
 <h3>Paid Bills</h3>
-<div style="display:flex; gap:10px; flex-wrap:wrap;">
-<input type="text" id="billSearch" placeholder="🔍 Search by customer, table or bill no..." style="margin:0; width:260px;" />
 <select id="methodFilter" style="width:auto; margin:0; padding:8px 12px;">
 <option value="all">All payment methods</option>
 <option value="cash">Cash</option>
 <option value="upi">UPI</option>
 <option value="card">Card</option>
 </select>
-</div>
 </div>
 
 <div class="table-wrap">
@@ -95,6 +94,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/mobile-nav.js"></script>
 <script type="module" src="js/billing.js"></script>
 </body>
 </html>

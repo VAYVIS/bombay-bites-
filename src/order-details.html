@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Order Details - Bombay Bites</title>
 <link rel="stylesheet" href="css/style.css" />
 <script>
@@ -18,14 +19,16 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <a href="menu.html">🍽️ Menu</a>
 <a href="orders.html" class="active">🧾 Orders</a>
 <a href="billing.html">📄 Billing</a>
-<a href="profile.html">👤 Profile</a>
 </nav>
 <button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
 </aside>
 
 <div class="main-content">
 <nav class="navbar">
+<div style="display:flex; align-items:center; gap:10px;">
+<button id="sidebarHamburger" class="sidebar-hamburger" aria-label="Open menu">☰</button>
 <div class="brand-font" style="font-size:18px;">Order Details</div>
+</div>
 <div style="display:flex; align-items:center; gap:16px;">
 <span id="userEmail" class="text-muted" style="font-size:13px;"></span>
 <button id="themeToggle" class="theme-toggle">🌙</button>
@@ -66,6 +69,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/mobile-nav.js"></script>
 <script type="module" src="js/order-details.js"></script>
 <script>
   // Point the Checkout button at this order
@@ -75,4 +79,4 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
   })();
 </script>
 </body>
-</html> 
+</html>

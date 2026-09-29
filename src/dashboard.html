@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Dashboard - Bombay Bites</title>
 <link rel="stylesheet" href="css/style.css" />
 <script>
@@ -13,7 +14,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <div class="app-layout">
 <!-- SIDEBAR (shared) -->
 <aside class="sidebar" id="sidebar"></aside>
-<script type="module" src="js/sidebar.js"></script>
+<script src="js/sidebar.js"></script>
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
@@ -63,6 +64,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/mobile-nav.js"></script>
 <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>

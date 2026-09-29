@@ -12,7 +12,12 @@ const session = await requireAuth();
 if (session) {
   document.getElementById('userEmail').textContent = session.user.email;
 }
-document.getElementById('logoutBtn').addEventListener('click', logout);
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', logout);
+} else {
+  console.warn('logoutBtn not found — sidebar.js may not have loaded on this page.');
+}
 
 const params = new URLSearchParams(window.location.search);
 const orderId = params.get('id');
@@ -41,7 +46,7 @@ async function loadOrderHeader() {
     return;
   }
 
-  document.getElementById('orderCustomer').innerHTML = `<span class="heading-line"><span class="page-heading">${order.customer_name}</span></span>`;
+  document.getElementById('orderCustomer').textContent = order.customer_name;
   document.getElementById('orderMeta').textContent =
     `Table ${order.table_number || 'N/A'} • Status: ${order.status} • ${new Date(order.created_at).toLocaleString()}`;
 }
@@ -152,8 +157,6 @@ async function loadOrderItems() {
 
   document.querySelectorAll('.remove-item-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const confirmed = await confirmAction('Remove this item from the order?', { title: 'Remove item?', confirmLabel: 'Remove' });
-      if (!confirmed) return;
       await supabase.from('order_items').delete().eq('id', btn.dataset.id);
       await recalculateTotal();
       await loadOrderItems();

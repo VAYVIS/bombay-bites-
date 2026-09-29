@@ -14,23 +14,23 @@ if (signupForm) {
     e.preventDefault();
 
 
-    const fullName =
+const fullName =
       document.getElementById('fullName').value.trim();
 
-    const email =
+const email =
       document.getElementById('email').value.trim();
 
-    const password =
+const password =
       document.getElementById('password').value;
 
 
-    const errorBox =
+const errorBox =
       document.getElementById('signupError');
 
-    const successBox =
+const successBox =
       document.getElementById('signupSuccess');
 
-    const btn =
+const btn =
       document.getElementById('signupBtn');
 
 
@@ -42,38 +42,67 @@ if (signupForm) {
     btn.textContent = 'Creating account...';
 
 
-    const { data, error } =
-      await supabase.auth.signUp({
+const { data, error } =
+await supabase.auth.signUp({
 
-        email: email,
+email: email,
 
-        password: password,
+password: password,
 
-        options: {
-          data: {
-            full_name: fullName
+options: {
+data: {
+full_name: fullName
           }
         }
 
       });
 
 
-    btn.disabled = false;
-    btn.textContent = 'Sign Up';
+if (error) {
 
-
-    if (error) {
+      btn.disabled = false;
+      btn.textContent = 'Sign Up';
 
       errorBox.textContent = error.message;
 
       errorBox.style.display = 'block';
 
-      return;
+return;
     }
 
 
+// If a manager invited this email, apply the role they set
+// and mark the invite as used. Non-fatal on failure — the
+// account still exists either way, just with the default
+// 'staff' role from the profiles trigger.
+try {
+
+const { data: inviteRows } =
+await supabase.rpc('get_invite_role', { invite_email: email });
+
+const invited = inviteRows && inviteRows[0];
+
+if (invited && data.user) {
+
+await supabase
+          .from('profiles')
+          .update({ role: invited.role })
+          .eq('id', data.user.id);
+
+await supabase.rpc('accept_invite', { invite_email: email });
+      }
+
+    } catch (_) {
+      // ignore — role just stays at the default
+    }
+
+
+    btn.disabled = false;
+    btn.textContent = 'Sign Up';
+
+
     successBox.textContent =
-      'Account created! You can now sign in.';
+'Account created! You can now sign in.';
 
     successBox.style.display = 'block';
 
@@ -81,7 +110,7 @@ if (signupForm) {
     signupForm.reset();
 
 
-    setTimeout(() => {
+setTimeout(() => {
 
       window.location.href = 'login.html';
 
@@ -106,17 +135,17 @@ if (loginForm) {
     e.preventDefault();
 
 
-    const email =
+const email =
       document.getElementById('email').value.trim();
 
-    const password =
+const password =
       document.getElementById('password').value;
 
 
-    const errorBox =
+const errorBox =
       document.getElementById('loginError');
 
-    const btn =
+const btn =
       document.getElementById('loginBtn');
 
 
@@ -127,12 +156,12 @@ if (loginForm) {
     btn.textContent = 'Signing in...';
 
 
-    const { data, error } =
-      await supabase.auth.signInWithPassword({
+const { data, error } =
+await supabase.auth.signInWithPassword({
 
-        email: email,
+email: email,
 
-        password: password
+password: password
 
       });
 
@@ -141,17 +170,17 @@ if (loginForm) {
     btn.textContent = 'Sign In';
 
 
-    if (error) {
+if (error) {
 
       errorBox.textContent = error.message;
 
       errorBox.style.display = 'block';
 
-      return;
+return;
     }
 
 
-    // Supabase automatically keeps the session.
+// Supabase automatically keeps the session.
     window.location.href = 'dashboard.html';
 
   });
@@ -166,20 +195,20 @@ if (loginForm) {
 
 export async function requireAuth() {
 
-  const {
-    data: { session }
+const {
+data: { session }
   } = await supabase.auth.getSession();
 
 
-  if (!session) {
+if (!session) {
 
-    window.location.href = 'login.html';
+window.location.href = 'login.html';
 
-    return null;
+return null;
   }
 
 
-  return session;
+return session;
 }
 
 
@@ -190,8 +219,8 @@ export async function requireAuth() {
 
 export async function logout() {
 
-  await supabase.auth.signOut();
+await supabase.auth.signOut();
 
-  window.location.href = 'login.html';
+window.location.href = 'login.html';
 
 }

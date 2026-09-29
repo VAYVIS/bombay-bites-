@@ -1,7 +1,7 @@
 import { supabase } from './supabaseClient.js';
 import { requireAuth, logout } from './auth.js';
-import { getMyRole } from './role.js';
 
+// Built-in fallback image (no internet needed)
 const FALLBACK_IMG = 'data:image/svg+xml,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="160" viewBox="0 0 300 160">' +
   '<rect width="300" height="160" fill="#d7dee7"/>' +
@@ -12,9 +12,12 @@ const session = await requireAuth();
 if (session) {
   document.getElementById('userEmail').textContent = session.user.email;
 }
-document.getElementById('logoutBtn').addEventListener('click', logout);
-
-const isManager = (await getMyRole(session.user.id)) === 'manager';
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', logout);
+} else {
+  console.warn('logoutBtn not found — sidebar.js may not have loaded on this page.');
+}
 
 const menuGrid = document.getElementById('menuGrid');
 const menuModal = document.getElementById('menuModal');
@@ -22,24 +25,8 @@ const menuForm = document.getElementById('menuForm');
 const modalTitle = document.getElementById('modalTitle');
 const modalError = document.getElementById('modalError');
 const menuError = document.getElementById('menuError');
-const menuSearch = document.getElementById('menuSearch');
-const openAddModalBtn = document.getElementById('openAddModal');
-const openCategoryModalBtn = document.getElementById('openCategoryModal');
-
-if (!isManager) {
-  if (openAddModalBtn) openAddModalBtn.style.display = 'none';
-  if (openCategoryModalBtn) openCategoryModalBtn.style.display = 'none';
-}
 
 let categories = [];
-let allMenuItems = [];
-
-// ---- XSS-safe escaping, matching orders.js / billing.js / staff.js ----
-function esc(text) {
-  const div = document.createElement('div');
-  div.textContent = text ?? '';
-  return div.innerHTML;
-}
 
 // ================= LOAD CATEGORIES (for the dropdown) =================
 async function loadCategories() {
@@ -49,7 +36,7 @@ async function loadCategories() {
 
   const select = document.getElementById('itemCategory');
   select.innerHTML = '<option value="">Select category</option>' +
-    data.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+    data.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 }
 
 // ================= READ: LOAD MENU ITEMS =================
@@ -65,74 +52,38 @@ async function loadMenu() {
     return;
   }
 
-  menuError.style.display = 'none';
-  allMenuItems = items || [];
-  renderMenu(allMenuItems);
-}
-
-// ================= RENDER =================
-function renderMenu(items) {
   if (!items || items.length === 0) {
-    const hasQuery = menuSearch && menuSearch.value.trim().length > 0;
-    menuGrid.innerHTML = hasQuery
-      ? `<p class="text-muted">No items match your search.</p>`
-      : `<p class="text-muted">No menu items yet.${isManager ? ' Click "+ Add Item" to create one.' : ''}</p>`;
+    menuGrid.innerHTML = `<p class="text-muted">No menu items yet. Click "+ Add Item" to create one.</p>`;
     return;
   }
 
-  const actionButtons = (id) => isManager ? `
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-outline edit-btn" data-id="${esc(id)}" style="padding:6px 14px; font-size:13px;">Edit</button>
-          <button class="btn btn-outline delete-btn" data-id="${esc(id)}" style="padding:6px 14px; font-size:13px; border-color: var(--danger); color: var(--danger);">Delete</button>
-        </div>` : '';
-
-  menuGrid.innerHTML = items.map(item => {
-    // image_url is only ever set by our own uploadImage() (Supabase storage URL)
-    // or validated on save (http/https only), so it's safe as an attribute here.
-    const imgSrc = item.image_url || FALLBACK_IMG;
-    return `
+  menuGrid.innerHTML = items.map(item => `
     <div class="card menu-item-card">
-      <img src="${imgSrc}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'" alt="${esc(item.name)}" style="width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px;" />
+      <img src="${item.image_url || FALLBACK_IMG}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'" alt="${item.name}" style="width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px;" />
       <div style="display:flex; justify-content:space-between; align-items:start;">
-        <h3>${esc(item.name)}</h3>
+        <h3>${item.name}</h3>
         <span class="status-badge ${item.is_available ? 'status-completed' : 'status-cancelled'}">
           ${item.is_available ? 'Available' : 'Unavailable'}
         </span>
       </div>
-      <p class="text-muted" style="margin: 8px 0; font-size:13px;">${esc(item.description) || 'No description'}</p>
-      <p class="text-muted" style="font-size:12px;">${esc(item.categories?.name) || 'Uncategorized'}</p>
+      <p class="text-muted" style="margin: 8px 0; font-size:13px;">${item.description || 'No description'}</p>
+      <p class="text-muted" style="font-size:12px;">${item.categories?.name || 'Uncategorized'}</p>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
         <strong style="color: var(--accent-primary); font-size:18px;">₹${Number(item.price).toFixed(2)}</strong>
-        ${actionButtons(item.id)}
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-outline edit-btn" data-id="${item.id}" style="padding:6px 14px; font-size:13px;">Edit</button>
+          <button class="btn btn-outline delete-btn" data-id="${item.id}" style="padding:6px 14px; font-size:13px; border-color: var(--danger); color: var(--danger);">Delete</button>
+        </div>
       </div>
     </div>
-  `;
-  }).join('');
+  `).join('');
 
-  if (isManager) {
-    document.querySelectorAll('.edit-btn').forEach(btn =>
-      btn.addEventListener('click', () => openEditModal(btn.dataset.id, allMenuItems))
-    );
-    document.querySelectorAll('.delete-btn').forEach(btn =>
-      btn.addEventListener('click', () => deleteItem(btn.dataset.id))
-    );
-  }
-}
-
-// ================= SEARCH =================
-if (menuSearch) {
-  menuSearch.addEventListener('input', (e) => {
-    const q = e.target.value.trim().toLowerCase();
-    if (!q) {
-      renderMenu(allMenuItems);
-      return;
-    }
-    const filtered = allMenuItems.filter(item =>
-      item.name.toLowerCase().includes(q) ||
-      (item.categories?.name || '').toLowerCase().includes(q)
-    );
-    renderMenu(filtered);
-  });
+  document.querySelectorAll('.edit-btn').forEach(btn =>
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id, items))
+  );
+  document.querySelectorAll('.delete-btn').forEach(btn =>
+    btn.addEventListener('click', () => deleteItem(btn.dataset.id))
+  );
 }
 
 // ================= IMAGE PREVIEW =================
@@ -181,19 +132,17 @@ async function uploadImage(file) {
   return data.publicUrl;
 }
 
-// ================= MODAL CONTROLS (add/edit item) =================
-if (openAddModalBtn) {
-  openAddModalBtn.addEventListener('click', () => {
-    modalTitle.textContent = 'Add Menu Item';
-    menuForm.reset();
-    document.getElementById('itemId').value = '';
-    document.getElementById('itemImage').value = '';
-    imageFileInput.value = '';
-    showPreview('');
-    modalError.style.display = 'none';
-    menuModal.style.display = 'flex';
-  });
-}
+// ================= MODAL CONTROLS =================
+document.getElementById('openAddModal').addEventListener('click', () => {
+  modalTitle.textContent = 'Add Menu Item';
+  menuForm.reset();
+  document.getElementById('itemId').value = '';
+  document.getElementById('itemImage').value = '';
+  imageFileInput.value = '';
+  showPreview('');
+  modalError.style.display = 'none';
+  menuModal.style.display = 'flex';
+});
 
 document.getElementById('closeModal').addEventListener('click', () => {
   menuModal.style.display = 'none';
@@ -217,21 +166,12 @@ function openEditModal(id, items) {
   menuModal.style.display = 'flex';
 }
 
-// ================= CREATE / UPDATE ITEM =================
+// ================= CREATE / UPDATE =================
 menuForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const id = document.getElementById('itemId').value;
   const saveBtn = document.getElementById('saveBtn');
-
-  const rawImageUrl = document.getElementById('itemImage').value.trim();
-
-  // Validate the manual "image URL" field — must be http(s) or empty.
-  if (rawImageUrl && !/^https?:\/\//i.test(rawImageUrl)) {
-    modalError.textContent = 'Image URL must start with http:// or https://';
-    modalError.style.display = 'block';
-    return;
-  }
 
   const payload = {
     name: document.getElementById('itemName').value.trim(),
@@ -239,11 +179,12 @@ menuForm.addEventListener('submit', async (e) => {
     price: parseFloat(document.getElementById('itemPrice').value),
     category_id: document.getElementById('itemCategory').value || null,
     is_available: document.getElementById('itemAvailable').checked,
-    image_url: rawImageUrl || null,
+    image_url: document.getElementById('itemImage').value.trim() || null,
   };
 
   saveBtn.disabled = true;
 
+  // Upload a newly chosen image first, then save its public URL with the item
   const file = imageFileInput.files[0];
   if (file) {
     saveBtn.textContent = 'Uploading image...';
@@ -281,9 +222,9 @@ menuForm.addEventListener('submit', async (e) => {
   loadMenu();
 });
 
-// ================= DELETE ITEM =================
+// ================= DELETE =================
 async function deleteItem(id) {
-  const confirmed = await confirmAction('This menu item will be permanently removed.', { title: 'Delete menu item?' });
+  const confirmed = confirm('Delete this menu item? This cannot be undone.');
   if (!confirmed) return;
 
   const { error } = await supabase.from('menu_items').delete().eq('id', id);
@@ -292,119 +233,6 @@ async function deleteItem(id) {
     return;
   }
   loadMenu();
-}
-
-// ================================================================
-// ======================= CATEGORY CRUD =========================
-// ================================================================
-
-const categoryModal = document.getElementById('categoryModal');
-const categoryError = document.getElementById('categoryError');
-const categoryList = document.getElementById('categoryList');
-const newCategoryForm = document.getElementById('newCategoryForm');
-const newCategoryName = document.getElementById('newCategoryName');
-
-if (openCategoryModalBtn) {
-  openCategoryModalBtn.addEventListener('click', () => {
-    categoryError.style.display = 'none';
-    categoryModal.style.display = 'flex';
-    loadCategoryList();
-  });
-}
-
-document.getElementById('closeCategoryModal').addEventListener('click', () => {
-  categoryModal.style.display = 'none';
-  loadCategories();
-  loadMenu();
-});
-
-// ---- READ: render the category list with inline rename + delete ----
-async function loadCategoryList() {
-  const { data, error } = await supabase.from('categories').select('id, name').order('name');
-
-  if (error) {
-    categoryError.textContent = 'Failed to load categories: ' + error.message;
-    categoryError.style.display = 'block';
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    categoryList.innerHTML = `<p class="text-muted">No categories yet. Add one above.</p>`;
-    return;
-  }
-
-  categoryList.innerHTML = data.map(c => `
-    <div class="card" data-cat-row="${esc(c.id)}" style="padding:10px 12px; display:flex; align-items:center; gap:8px;">
-      <input type="text" class="cat-name-input" data-id="${esc(c.id)}" value="${esc(c.name)}" style="margin:0; flex:1;" />
-      <button class="btn btn-outline cat-save-btn" data-id="${esc(c.id)}" style="padding:6px 12px; font-size:13px;">Save</button>
-      <button class="btn btn-outline cat-delete-btn" data-id="${esc(c.id)}" style="padding:6px 12px; font-size:13px; border-color: var(--danger); color: var(--danger);">Delete</button>
-    </div>
-  `).join('');
-
-  document.querySelectorAll('.cat-save-btn').forEach(btn => {
-    btn.addEventListener('click', () => renameCategory(btn.dataset.id));
-  });
-  document.querySelectorAll('.cat-delete-btn').forEach(btn => {
-    btn.addEventListener('click', () => deleteCategory(btn.dataset.id));
-  });
-}
-
-// ---- CREATE ----
-newCategoryForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const name = newCategoryName.value.trim();
-  if (!name) return;
-
-  categoryError.style.display = 'none';
-
-  const { error } = await supabase.from('categories').insert({ name });
-
-  if (error) {
-    categoryError.textContent = 'Failed to add category: ' + error.message;
-    categoryError.style.display = 'block';
-    return;
-  }
-
-  newCategoryForm.reset();
-  loadCategoryList();
-});
-
-// ---- UPDATE ----
-async function renameCategory(id) {
-  const input = document.querySelector(`.cat-name-input[data-id="${id}"]`);
-  const newName = input.value.trim();
-  if (!newName) {
-    categoryError.textContent = 'Category name cannot be empty.';
-    categoryError.style.display = 'block';
-    return;
-  }
-
-  const { error } = await supabase.from('categories').update({ name: newName }).eq('id', id);
-
-  if (error) {
-    categoryError.textContent = 'Failed to rename: ' + error.message;
-    categoryError.style.display = 'block';
-    return;
-  }
-
-  categoryError.style.display = 'none';
-  loadCategoryList();
-}
-
-// ---- DELETE ----
-async function deleteCategory(id) {
-  const confirmed = await confirmAction('Menu items using it will become "Uncategorized", not deleted.', { title: 'Delete category?' });
-  if (!confirmed) return;
-
-  const { error } = await supabase.from('categories').delete().eq('id', id);
-
-  if (error) {
-    categoryError.textContent = 'Failed to delete: ' + error.message;
-    categoryError.style.display = 'block';
-    return;
-  }
-
-  loadCategoryList();
 }
 
 // Init

@@ -25,7 +25,12 @@ const session = await requireAuth();
 if (session) {
   document.getElementById('userEmail').textContent = session.user.email;
 }
-document.getElementById('logoutBtn').addEventListener('click', logout);
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', logout);
+} else {
+  console.warn('logoutBtn not found — sidebar.js may not have loaded on this page.');
+}
 
 // Order id comes from the URL (?id=...) or, as a fallback, from sessionStorage
 const params = new URLSearchParams(window.location.search);

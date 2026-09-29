@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Staff - Bombay Bites</title>
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/billing.css" />
 <script>
 document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
 </script>
@@ -27,7 +29,10 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </nav>
 
 <div class="content-area">
-<h1 class="brand-font" style="margin-bottom: 24px;">Staff &amp; Roles</h1>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; gap:12px; flex-wrap:wrap;">
+  <h1 class="brand-font">Staff &amp; Roles</h1>
+  <button id="openInviteModal" class="btn btn-primary">+ Invite Staff</button>
+</div>
 
 <div id="staffError" class="error-msg" style="display:none;"></div>
 
@@ -48,13 +53,67 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </table>
 </div>
 </div>
+
+<div id="pendingInvitesCard" class="card" style="margin-top:24px;">
+<h3 style="margin-bottom:16px;">Pending Invites</h3>
+<div class="table-wrap">
+<table class="bill-table">
+<thead>
+<tr>
+<th>Email</th>
+<th>Name</th>
+<th>Role</th>
+<th>Invited</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="pendingInvitesBody">
+<tr><td colspan="5" class="text-muted">Loading invites...</td></tr>
+</tbody>
+</table>
 </div>
 </div>
+
+</div>
+</div>
+</div>
+
+<!-- INVITE STAFF MODAL -->
+<div id="inviteModal" class="modal-overlay" style="display:none;">
+  <div class="card modal-box">
+    <h2 class="brand-font" style="margin-bottom:20px;">Invite Staff</h2>
+
+    <div id="inviteError" class="error-msg" style="display:none;"></div>
+
+    <form id="inviteForm">
+      <label for="inviteEmail">Email</label>
+      <input type="email" id="inviteEmail" required placeholder="newhire@example.com" />
+
+      <label for="inviteName">Full Name</label>
+      <input type="text" id="inviteName" placeholder="e.g. Priya Nair" />
+
+      <label for="inviteRole">Role</label>
+      <select id="inviteRole">
+        <option value="staff" selected>Staff</option>
+        <option value="manager">Manager</option>
+      </select>
+
+      <p class="text-muted" style="font-size:12px; margin:-6px 0 16px;">
+        They'll sign up normally on the Sign Up page using this email — their role will be applied automatically.
+      </p>
+
+      <div style="display:flex; gap:12px;">
+        <button type="submit" class="btn btn-primary" id="sendInviteBtn" style="flex:1;">Send Invite</button>
+        <button type="button" id="closeInviteModal" class="btn btn-outline" style="flex:1;">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/mobile-nav.js"></script>
 <script type="module" src="js/staff.js"></script>
 </body>
 </html>
