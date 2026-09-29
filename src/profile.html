@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>My Profile - Bombay Bites</title>
+<link rel="stylesheet" href="css/style.css" />
+<script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+</script>
+</head>
+<body>
+
+<div class="app-layout">
+<aside class="sidebar">
+<div class="logo brand-font" style="padding: 0 20px 24px;">🍛 Bombay Bites</div>
+<nav class="sidebar-links">
+<a href="dashboard.html">📊 Dashboard</a>
+<a href="menu.html">🍽️ Menu</a>
+<a href="orders.html">🧾 Orders</a>
+<a href="billing.html">📄 Billing</a>
+<a href="profile.html" class="active">👤 Profile</a>
+</nav>
+<button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
+</aside>
+
+<div class="main-content">
+<nav class="navbar">
+<div class="brand-font" style="font-size:18px;">My Profile</div>
+<div style="display:flex; align-items:center; gap:16px;">
+<span id="userEmail" class="text-muted" style="font-size:13px;"></span>
+<button id="themeToggle" class="theme-toggle">🌙</button>
+</div>
+</nav>
+
+<div class="content-area">
+<h1 class="brand-font" style="margin-bottom: 24px;"><span class="heading-line"><span class="page-heading">My Profile</span></span></h1>
+
+<div id="profileError" class="error-msg" style="display:none;"></div>
+<div id="profileSuccess" class="success-msg" style="display:none;"></div>
+
+<!-- PROFILE CARD -->
+<div class="card">
+<div class="profile-header">
+<div class="avatar-wrap">
+<img id="avatarImg" class="avatar-img" alt="Profile photo" />
+<button type="button" id="avatarEditBtn" class="avatar-edit-btn" title="Change photo">✏️</button>
+<input type="file" id="avatarFile" accept="image/png,image/jpeg,image/webp" style="display:none;" />
+</div>
+<div class="profile-name-block">
+<h2 id="displayName" class="brand-font">—</h2>
+<span id="roleBadge" class="role-badge">—</span>
+<p class="text-muted" style="font-size:13px; margin-top:8px;">Member since <span id="memberSince">—</span></p>
+</div>
+</div>
+
+<form id="profileForm" style="margin-top:24px; max-width:420px;">
+<label for="fullName">Full Name</label>
+<input type="text" id="fullName" required placeholder="Your name" />
+
+<label for="emailField">Email</label>
+<input type="email" id="emailField" disabled />
+
+<button type="submit" class="btn btn-primary" id="saveProfileBtn" style="margin-top:8px;">Save Changes</button>
+</form>
+</div>
+
+<!-- STATS -->
+<div class="profile-stats">
+<div class="card stat-card">
+<p class="text-muted">Total Orders</p>
+<h2 id="statOrders">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Total Spent</p>
+<h2 id="statSpent">—</h2>
+</div>
+<div class="card stat-card">
+<p class="text-muted">Bills Paid</p>
+<h2 id="statPaid">—</h2>
+</div>
+</div>
+
+<!-- CHANGE PASSWORD -->
+<div class="card" style="margin-top:24px; max-width:420px;">
+<h3 style="margin-bottom:16px;">Change Password</h3>
+<div id="passError" class="error-msg" style="display:none;"></div>
+<div id="passSuccess" class="success-msg" style="display:none;"></div>
+<form id="passwordForm">
+<label for="newPassword">New Password</label>
+<input type="password" id="newPassword" minlength="6" required placeholder="Minimum 6 characters" />
+
+<label for="confirmPassword">Confirm New Password</label>
+<input type="password" id="confirmPassword" minlength="6" required placeholder="Re-enter new password" />
+
+<button type="submit" class="btn btn-primary" id="savePasswordBtn">Update Password</button>
+</form>
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/profile.js"></script>
+</body>
+</html>

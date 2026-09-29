@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js';
 import { requireAuth, logout } from './auth.js';
+import { getMyRole } from './role.js';
 
 const session = await requireAuth();
 if (session) {
@@ -7,9 +8,12 @@ if (session) {
 }
 document.getElementById('logoutBtn').addEventListener('click', logout);
 
+const isManager = (await getMyRole(session.user.id)) === 'manager';
+
 const billingError = document.getElementById('billingError');
 const billsBody = document.getElementById('billsBody');
 const methodFilter = document.getElementById('methodFilter');
+const billSearch = document.getElementById('billSearch');
 
 let paidBills = [];
 
@@ -23,29 +27,35 @@ function esc(text) {
 
 // ================= LOAD STATS + BILLS =================
 async function loadBilling() {
-  // Paid bills for this user
-  const { data: paid, error } = await supabase
+  let paidQuery = supabase
     .from('orders')
-    .select('id, customer_name, table_number, payment_method, total_amount, paid_at, created_at')
-    .eq('user_id', session.user.id)
+    .select('id, customer_name, table_number, payment_method, total_amount, paid_at, created_at, profiles(full_name)')
     .eq('payment_status', 'paid')
     .order('paid_at', { ascending: false });
+
+  let unpaidQuery = supabase
+    .from('orders')
+    .select('total_amount')
+    .eq('payment_status', 'unpaid')
+    .neq('status', 'cancelled');
+
+  if (!isManager) {
+    paidQuery = paidQuery.eq('user_id', session.user.id);
+    unpaidQuery = unpaidQuery.eq('user_id', session.user.id);
+  }
+
+  const { data: paid, error } = await paidQuery;
 
   if (error) {
     billingError.textContent = 'Failed to load bills: ' + error.message;
     billingError.style.display = 'block';
-    billsBody.innerHTML = '<tr><td colspan="7" class="error-msg">Could not load bills.</td></tr>';
+    billsBody.innerHTML = '<tr><td colspan="8" class="error-msg">Could not load bills.</td></tr>';
     return;
   }
+  billingError.style.display = 'none';
   paidBills = paid || [];
 
-  // Orders still waiting for payment (not cancelled)
-  const { data: unpaid } = await supabase
-    .from('orders')
-    .select('total_amount')
-    .eq('user_id', session.user.id)
-    .eq('payment_status', 'unpaid')
-    .neq('status', 'cancelled');
+  const { data: unpaid } = await unpaidQuery;
 
   renderStats(unpaid || []);
   renderBills();
@@ -68,15 +78,27 @@ function renderStats(unpaid) {
   document.getElementById('statUnpaid').textContent = unpaid.length;
 }
 
-// ================= RENDER BILL LIST (with filter) =================
+// ================= RENDER BILL LIST (method filter + search) =================
 function renderBills() {
   const method = methodFilter.value;
-  const rows = method === 'all'
+  const query = billSearch ? billSearch.value.trim().toLowerCase() : '';
+
+  let rows = method === 'all'
     ? paidBills
     : paidBills.filter(b => b.payment_method === method);
 
+  if (query) {
+    rows = rows.filter(b =>
+      (b.customer_name || '').toLowerCase().includes(query) ||
+      (b.table_number || '').toLowerCase().includes(query) ||
+      (b.profiles?.full_name || '').toLowerCase().includes(query) ||
+      ('bb-' + b.id.slice(0, 8)).toLowerCase().includes(query)
+    );
+  }
+
   if (rows.length === 0) {
-    billsBody.innerHTML = `<tr><td colspan="7" class="text-muted">No paid bills${method === 'all' ? ' yet. Check out an order to create one.' : ' for this payment method.'}</td></tr>`;
+    const hasFilters = method !== 'all' || query;
+    billsBody.innerHTML = `<tr><td colspan="8" class="text-muted">No paid bills${hasFilters ? ' match your filters.' : ' yet. Check out an order to create one.'}</td></tr>`;
     return;
   }
 
@@ -85,6 +107,7 @@ function renderBills() {
       <td><strong>BB-${b.id.slice(0, 8).toUpperCase()}</strong></td>
       <td>${esc(b.customer_name)}</td>
       <td>${esc(b.table_number || 'N/A')}</td>
+      <td>${esc(b.profiles?.full_name || '—')}</td>
       <td><span class="method-badge">${esc(b.payment_method || '-')}</span></td>
       <td>${new Date(b.paid_at || b.created_at).toLocaleString()}</td>
       <td style="text-align:right;"><strong>${money(b.total_amount)}</strong></td>
@@ -96,6 +119,10 @@ function renderBills() {
 }
 
 methodFilter.addEventListener('change', renderBills);
+
+if (billSearch) {
+  billSearch.addEventListener('input', renderBills);
+}
 
 // Init
 loadBilling();

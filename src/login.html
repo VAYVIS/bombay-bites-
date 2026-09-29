@@ -1,62 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sign In - Bombay Bites</title>
-<link rel="stylesheet" href="css/style.css" />
-<!-- change this to the real filename of your landing page stylesheet -->
-<link rel="stylesheet" href="css/landing.css" />
-<link rel="stylesheet" href="css/login.css" />
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/landing.css">
+<link rel="stylesheet" href="css/auth.css">
+
+<style>
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--l-accent, #b5442e);
+    padding: 9px 16px;
+    height: 20px;
+    box-sizing: content-box;
+    border-radius: 999px;
+    background: var(--l-chip);
+    border: 1px solid var(--l-card-border);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: homeLinkIn 0.5s ease-out 0.15s forwards;
+    z-index: 20;
+  }
+
+  .home-link .arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .home-link:hover {
+    background: var(--l-accent);
+    color: #fff;
+    border-color: transparent;
+    transform: translateX(0) translateY(-1px);
+  }
+
+  .home-link:hover .arrow {
+    transform: translateX(-3px);
+  }
+
+  @keyframes homeLinkIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-link {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
 <script>
-document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+document.documentElement.setAttribute(
+"data-theme",
+localStorage.getItem("theme") || "light"
+);
 </script>
 </head>
-<body class="landing login-page">
 
-<!-- background: same blobs + floating food as the landing page -->
+<body class="landing">
+
+<a href="index.html" class="home-link"><span class="arrow">←</span> Home</a>
+
+<div class="auth-page">
+
+<!-- LEFT: brand / decorative panel -->
+<aside class="auth-visual">
 <div class="bg-blob blob-1"></div>
 <div class="bg-blob blob-2"></div>
-<div class="bg-blob blob-3"></div>
 <div class="floaters" aria-hidden="true">
-  <span>🍛</span><span>🥘</span><span>🍲</span><span>🥭</span><span>🍢</span>
+<span>🍛</span><span>🥘</span><span>🍲</span>
 </div>
 
-<nav class="land-nav">
-  <a href="index.html" class="home-btn"><span class="home-icon">🏠</span><span>Home</span></a>
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
-</nav>
+<a href="index.html" class="brand-mark">🍛 Bombay Bites</a>
 
-<main class="login-stage">
-  <div class="auth-card login-card">
-    <h2 class="brand-font login-title">Welcome Back</h2>
-    <p class="auth-sub">Sign in to manage menu, orders and billing.</p>
+<h1 class="brand-font">
+      Welcome back to<br>
+<span class="accent-word">Bombay Bites</span>
+</h1>
 
-    <div id="loginError" class="error-msg" role="alert" style="display:none;"></div>
+<p class="lede">
+      Sign in to manage your café's menu, take table orders, generate
+      GST bills and keep an eye on the day's revenue.
+</p>
 
-    <form id="loginForm">
-      <label for="email">Email</label>
-      <input type="email" id="email" required placeholder="you@example.com" autocomplete="email" />
+<ul class="auth-points">
+<li><span class="dot">🍽️</span> Manage your live menu in seconds</li>
+<li><span class="dot">🧾</span> Track every table's order in real time</li>
+<li><span class="dot">💳</span> Bill and close out with one click</li>
+</ul>
+</aside>
 
-      <label for="password">Password</label>
-      <div class="pw-wrap">
-        <input type="password" id="password" required placeholder="Your password" autocomplete="current-password" />
-        <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">👁</button>
-      </div>
+<!-- RIGHT: form -->
+<main class="auth-form-panel">
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button>
 
-      <button type="submit" class="land-btn primary-grad login-submit" id="loginBtn">Sign In</button>
-    </form>
+<div class="auth-card">
+<h2 class="brand-font login-title"><span class="heading-line"><span class="page-heading">Sign In</span></span></h2>
+<p class="auth-sub">Enter your details to access your dashboard.</p>
 
-    <p class="auth-foot">
-      Don't have an account? <a href="signup.html">Sign Up</a>
-    </p>
-  </div>
+<div id="loginError" class="error-msg" role="alert" style="display:none;"></div>
+
+<form id="loginForm">
+<label for="email">Email</label>
+<input type="email" id="email" name="email" required
+placeholder="you@example.com" autocomplete="email">
+
+<label for="password">Password</label>
+<div class="pw-wrap">
+<input type="password" id="password" name="password" required
+placeholder="Your password" autocomplete="current-password">
+<button type="button" id="pwToggle" class="pw-toggle"
+aria-label="Show password" title="Show password">👁</button>
+</div>
+
+<button type="submit" class="land-btn primary-grad login-submit" id="loginBtn">
+          Sign In
+</button>
+</form>
+
+<p class="auth-foot">Don't have an account? <a href="signup.html">Sign Up</a></p>
+</div>
 </main>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script type="module" src="js/interactions.js"></script>
-<script type="module" src="js/login-ui.js"></script>
 <script type="module" src="js/auth.js"></script>
+<script src="js/login-ui.js"></script>
+
 </body>
 </html>

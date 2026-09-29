@@ -1,0 +1,268 @@
+/* =========================================================
+   auth.css — Sign In / Sign Up pages
+   Load order: style.css -> landing.css -> auth.css
+   Reuses landing.css's variables (--l-*) and .auth-card /
+   .land-btn instead of redefining them, so light/dark theme
+   and the glass look stay consistent with the home page.
+   ========================================================= */
+
+/* ---------- page shell: split layout ---------- */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+}
+
+/* left: decorative brand panel (reuses landing's blobs/floaters) */
+.auth-visual {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 64px 56px;
+  overflow: hidden;
+}
+
+.auth-visual .brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--l-ink);
+  text-decoration: none;
+  margin-bottom: 48px;
+  width: fit-content;
+}
+
+.auth-visual h1 {
+  font-size: clamp(36px, 4vw, 52px);
+  line-height: 1.1;
+  margin: 0 0 18px;
+  color: var(--l-ink);
+}
+
+.auth-visual .accent-word {
+  background: var(--l-title);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+
+.auth-visual p.lede {
+  max-width: 420px;
+  color: var(--l-muted);
+  line-height: 1.7;
+  font-size: 16px;
+  margin: 0 0 32px;
+}
+
+.auth-visual .auth-points {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-visual .auth-points li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--l-ink);
+  font-weight: 600;
+  font-size: 14px;
+  animation: fadeUp 0.7s both;
+}
+.auth-visual .auth-points li:nth-child(1) { animation-delay: 0.1s; }
+.auth-visual .auth-points li:nth-child(2) { animation-delay: 0.2s; }
+.auth-visual .auth-points li:nth-child(3) { animation-delay: 0.3s; }
+
+.auth-visual .auth-points .dot {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: var(--l-chip);
+  border: 1px solid var(--l-card-border);
+  backdrop-filter: blur(8px);
+}
+
+/* right: the form panel sits on the plain gradient, no separate bg needed */
+.auth-form-panel {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+.auth-page .theme-toggle {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  z-index: 5;
+}
+
+/* ---------- the card itself ----------
+   .auth-card's glass look (background, blur, border, shadow)
+   already comes from landing.css — this only adds entrance
+   motion and internal spacing so it doesn't need !important. */
+.auth-form-panel .auth-card {
+  animation: cardIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-card .login-title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  text-align: left;
+}
+
+.auth-card .auth-sub {
+  margin: 0 0 26px;
+  text-align: left;
+  color: var(--l-muted);
+}
+
+/* ---------- form ---------- */
+.auth-card form { display: flex; flex-direction: column; }
+
+.auth-card label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: var(--l-ink);
+  margin: 14px 0 6px;
+}
+.auth-card label:first-of-type { margin-top: 0; }
+
+.auth-card input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--l-card-border);
+  background: var(--l-chip);
+  color: var(--l-ink);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.auth-card input::placeholder { color: var(--l-muted); opacity: 0.75; }
+
+.auth-card input:focus {
+  border-color: var(--l-accent);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 4px rgba(200, 64, 42, 0.16);
+}
+[data-theme="dark"] .auth-card input:focus {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* password field + eye toggle */
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 46px; }
+
+.pw-toggle {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--l-ink);
+  transition: background 0.15s, transform 0.15s;
+}
+.pw-toggle:hover { background: rgba(128, 128, 128, 0.18); }
+.pw-toggle:active { transform: translateY(-50%) scale(0.92); }
+.pw-toggle:focus-visible { outline: 2px solid var(--l-accent); outline-offset: 2px; }
+
+/* submit button: reuses .land-btn.primary-grad, just needs button-specific sizing */
+.auth-card .login-submit {
+  width: 100%;
+  margin-top: 22px;
+  border: none;
+  font-family: inherit;
+  font-size: 16px;
+}
+.auth-card .login-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.auth-card .auth-foot {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 13.5px;
+  color: var(--l-muted);
+}
+.auth-card .auth-foot a {
+  color: var(--l-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+.auth-card .auth-foot a:hover { text-decoration: underline; }
+
+/* error / success banners, tuned to sit inside the glass card */
+.auth-card .error-msg,
+.auth-card .success-msg {
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.auth-card .error-msg {
+  background: rgba(220, 60, 50, 0.12);
+  color: #c0392b;
+  border: 1px solid rgba(220, 60, 50, 0.28);
+}
+[data-theme="dark"] .auth-card .error-msg { color: #ff8b7d; }
+
+.auth-card .success-msg {
+  background: rgba(58, 125, 68, 0.12);
+  color: #2d7a3a;
+  border: 1px solid rgba(58, 125, 68, 0.28);
+}
+[data-theme="dark"] .auth-card .success-msg { color: #7fd68f; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-visual { display: none; }
+  .auth-form-panel { padding: 72px 20px 40px; min-height: 100vh; }
+}
+
+@media (max-width: 420px) {
+  .auth-form-panel .auth-card { padding: 28px 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-form-panel .auth-card,
+  .auth-visual .auth-points li { animation: none; }
+}

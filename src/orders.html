@@ -11,9 +11,17 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <body>
 
 <div class="app-layout">
-<!-- SIDEBAR (shared) -->
-<aside class="sidebar" id="sidebar"></aside>
-<script src="js/sidebar.js"></script>
+<aside class="sidebar">
+<div class="logo brand-font" style="padding: 0 20px 24px;">🍛 Bombay Bites</div>
+<nav class="sidebar-links">
+<a href="dashboard.html">📊 Dashboard</a>
+<a href="menu.html">🍽️ Menu</a>
+<a href="orders.html" class="active">🧾 Orders</a>
+<a href="billing.html">📄 Billing</a>
+<a href="profile.html">👤 Profile</a>
+</nav>
+<button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
+</aside>
 
 <div class="main-content">
 <nav class="navbar">
@@ -25,10 +33,12 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </nav>
 
 <div class="content-area">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-<h1 class="brand-font">Orders</h1>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+<h1 class="brand-font"><span class="heading-line"><span class="page-heading">Orders</span></span></h1>
 <button id="openAddModal" class="btn btn-primary">+ New Order</button>
 </div>
+
+<input type="text" id="orderSearch" placeholder="🔍 Search by customer or table number..." style="margin-bottom:20px;" />
 
 <div id="ordersError" class="error-msg" style="display:none;"></div>
 

@@ -11,9 +11,18 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 <body>
 
 <div class="app-layout">
-<!-- SIDEBAR (shared) -->
-<aside class="sidebar" id="sidebar"></aside>
-<script src="js/sidebar.js"></script>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<div class="logo brand-font" style="padding: 0 20px 24px;">🍛 Bombay Bites</div>
+<nav class="sidebar-links">
+<a href="dashboard.html" class="active">📊 Dashboard</a>
+<a href="menu.html">🍽️ Menu</a>
+<a href="orders.html">🧾 Orders</a>
+<a href="billing.html">📄 Billing</a>
+<a href="profile.html">👤 Profile</a>
+</nav>
+<button id="logoutBtn" class="btn btn-outline" style="margin: 20px;">Logout</button>
+</aside>
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
@@ -26,7 +35,7 @@ document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'
 </nav>
 
 <div class="content-area">
-<h1 class="brand-font" style="margin-bottom: 24px;">Welcome back 👋</h1>
+<h1 class="brand-font" style="margin-bottom: 24px;"><span class="heading-line"><span class="page-heading">Welcome back 👋</span></span></h1>
 
 <div id="statsGrid" class="stats-grid">
 <div class="card stat-card">

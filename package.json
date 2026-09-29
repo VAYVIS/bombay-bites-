@@ -9,9 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^latest"
+    "electron": "^33.0.0"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^latest"
+    "@supabase/supabase-js": "^2.45.0",
+    "electron-store": "^8.2.0"
   }
 }

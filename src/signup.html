@@ -1,212 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign Up - Bombay Bites</title>
 
-  <title>Sign Up - Bombay Bites</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/landing.css">
+<link rel="stylesheet" href="css/auth.css">
 
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/landing.css" />
-  <link rel="stylesheet" href="css/login.css" />
+<style>
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--l-accent, #b5442e);
+    padding: 9px 16px;
+    height: 20px;
+    box-sizing: content-box;
+    border-radius: 999px;
+    background: var(--l-chip);
+    border: 1px solid var(--l-card-border);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: homeLinkIn 0.5s ease-out 0.15s forwards;
+    z-index: 20;
+  }
 
-  <script>
-    document.documentElement.setAttribute(
-      'data-theme',
-      localStorage.getItem('theme') || 'light'
-    );
-  </script>
+  .home-link .arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .home-link:hover {
+    background: var(--l-accent);
+    color: #fff;
+    border-color: transparent;
+    transform: translateX(0) translateY(-1px);
+  }
+
+  .home-link:hover .arrow {
+    transform: translateX(-3px);
+  }
+
+  @keyframes homeLinkIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-link {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+document.documentElement.setAttribute(
+"data-theme",
+localStorage.getItem("theme") || "light"
+);
+</script>
 </head>
 
-<body class="landing login-page">
+<body class="landing">
 
-  <!-- Background blobs -->
-  <div class="bg-blob blob-1"></div>
-  <div class="bg-blob blob-2"></div>
-  <div class="bg-blob blob-3"></div>
+<a href="index.html" class="home-link"><span class="arrow">←</span> Home</a>
 
-  <!-- Floating food -->
-  <div class="floaters" aria-hidden="true">
-    <span>🍛</span>
-    <span>🥘</span>
-    <span>🍲</span>
-    <span>🥭</span>
-    <span>🍢</span>
-  </div>
+<div class="auth-page">
 
-  <!-- Navigation -->
-  <nav class="land-nav">
+<!-- LEFT: brand / decorative panel -->
+<aside class="auth-visual">
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="floaters" aria-hidden="true">
+<span>🥭</span><span>🍢</span><span>☕</span>
+</div>
 
-    <a href="index.html" class="home-btn">
-      <span class="home-icon">🏠</span>
-      <span>Home</span>
-    </a>
+<a href="index.html" class="brand-mark">🍛 Bombay Bites</a>
 
-    <button
-      id="themeToggle"
-      class="theme-toggle"
-      type="button"
-      aria-label="Toggle dark mode"
-    >
-      🌙
-    </button>
+<h1 class="brand-font">
+      Join the team at<br>
+<span class="accent-word">Bombay Bites</span>
+</h1>
 
-  </nav>
+<p class="lede">
+      Create a staff account to start managing the menu, taking orders
+      and handling billing for your café.
+</p>
 
-  <!-- Signup area -->
-  <main class="login-stage">
+<ul class="auth-points">
+<li><span class="dot">⚡</span> Set up in under a minute</li>
+<li><span class="dot">🔒</span> Your data stays private to your account</li>
+<li><span class="dot">📊</span> Full dashboard access from day one</li>
+</ul>
+</aside>
 
-    <div class="auth-card login-card">
+<!-- RIGHT: form -->
+<main class="auth-form-panel">
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button>
 
-      <!-- Heading -->
-      <h2 class="brand-font login-title">
-        Create Account
-      </h2>
+<div class="auth-card">
+<h2 class="brand-font login-title"><span class="heading-line"><span class="page-heading">Create Account</span></span></h2>
+<p class="auth-sub">Sign up to manage menu, orders and billing.</p>
 
-      <p class="auth-sub">
-        Sign up to manage menu, orders and billing.
-      </p>
+<div id="signupError" class="error-msg" role="alert" style="display:none;"></div>
+<div id="signupSuccess" class="success-msg" role="status" style="display:none;"></div>
 
-      <!-- Error message -->
-      <div
-        id="signupError"
-        class="error-msg"
-        role="alert"
-        style="display: none;"
-      ></div>
+<form id="signupForm">
+<label for="fullName">Full Name</label>
+<input type="text" id="fullName" name="fullName" required
+placeholder="e.g. Rohan Shah" autocomplete="name">
 
-      <!-- Success message -->
-      <div
-        id="signupSuccess"
-        class="success-msg"
-        role="status"
-        style="display: none;"
-      ></div>
+<label for="email">Email</label>
+<input type="email" id="email" name="email" required
+placeholder="you@example.com" autocomplete="email">
 
-      <!-- Signup form -->
-      <form id="signupForm">
+<label for="password">Password</label>
+<div class="pw-wrap">
+<input type="password" id="password" name="password" required
+minlength="6" placeholder="Minimum 6 characters" autocomplete="new-password">
+<button type="button" id="pwToggle" class="pw-toggle"
+aria-label="Show password" title="Show password">👁</button>
+</div>
 
-        <!-- Full Name -->
-        <label for="fullName">
-          Full Name
-        </label>
-
-        <input
-          type="text"
-          id="fullName"
-          required
-          placeholder="e.g. Rohan Shah"
-          autocomplete="name"
-        />
-
-        <!-- Email -->
-        <label for="email">
-          Email
-        </label>
-
-        <input
-          type="email"
-          id="email"
-          required
-          placeholder="you@example.com"
-          autocomplete="email"
-        />
-
-        <!-- Password -->
-        <label for="password">
-          Password
-        </label>
-
-        <div class="pw-wrap">
-
-          <input
-            type="password"
-            id="password"
-            required
-            placeholder="Minimum 6 characters"
-            minlength="6"
-            autocomplete="new-password"
-          />
-
-          <button
-            type="button"
-            class="pw-toggle"
-            id="pwToggle"
-            aria-label="Show password"
-          >
-            👁
-          </button>
-
-        </div>
-
-        <!-- Sign Up button -->
-        <button
-          type="submit"
-          class="land-btn primary-grad login-submit"
-          id="signupBtn"
-        >
+<button type="submit" class="land-btn primary-grad login-submit" id="signupBtn">
           Sign Up
-        </button>
+</button>
+</form>
 
-      </form>
+<p class="auth-foot">Already have an account? <a href="login.html">Sign In</a></p>
+</div>
+</main>
 
-      <!-- Login link -->
-      <p class="auth-foot">
-        Already have an account?
-        <a href="login.html">Sign In</a>
-      </p>
+</div>
 
-    </div>
-
-  </main>
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-  <!-- Existing scripts -->
-  <script type="module" src="js/theme.js"></script>
-  <script type="module" src="js/interactions.js"></script>
-  <script type="module" src="js/auth.js"></script>
-
-  <!-- Password Show / Hide -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-
-      const passwordInput = document.getElementById('password');
-      const pwToggle = document.getElementById('pwToggle');
-
-      if (!passwordInput || !pwToggle) {
-        return;
-      }
-
-      pwToggle.addEventListener('click', function () {
-
-        if (passwordInput.type === 'password') {
-
-          passwordInput.type = 'text';
-
-          pwToggle.textContent = '🙈';
-          pwToggle.setAttribute(
-            'aria-label',
-            'Hide password'
-          );
-
-        } else {
-
-          passwordInput.type = 'password';
-
-          pwToggle.textContent = '👁';
-          pwToggle.setAttribute(
-            'aria-label',
-            'Show password'
-          );
-
-        }
-
-      });
-
-    });
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/interactions.js"></script>
+<script type="module" src="js/auth.js"></script>
+<script src="js/login-ui.js"></script>
 
 </body>
 </html>

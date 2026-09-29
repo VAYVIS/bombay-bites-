@@ -1,18 +1,85 @@
-// login-ui.js — UI-only behaviour for the Sign In page.
-// It does NOT touch authentication; that stays in auth.js.
+// =====================================================
+// BOMBAY BITES
+// PASSWORD SHOW / HIDE
+// =====================================================
 
-const passwordInput = document.getElementById('password');
-const toggleBtn = document.getElementById('pwToggle');
+console.log("login-ui.js loaded");
 
-if (passwordInput && toggleBtn) {
-  toggleBtn.addEventListener('click', () => {
-    const isHidden = passwordInput.type === 'password';
+document.addEventListener("DOMContentLoaded", function () {
 
-    passwordInput.type = isHidden ? 'text' : 'password';
-    toggleBtn.textContent = isHidden ? '🙈' : '👁';
-    toggleBtn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+  console.log("login-ui DOM ready");
 
-    // keep the cursor in the field so typing can continue
-    passwordInput.focus();
+  const passwordInput = document.getElementById("password");
+  const toggleButton = document.getElementById("pwToggle");
+
+  console.log("Password input:", passwordInput);
+  console.log("Password button:", toggleButton);
+
+
+  if (!passwordInput || !toggleButton) {
+    console.error("Password elements not found.");
+    return;
+  }
+
+
+  // Prevent the button from affecting the form
+  toggleButton.addEventListener("mousedown", function (event) {
+    event.preventDefault();
   });
-}
+
+
+  // Show / hide password
+  toggleButton.addEventListener("click", function (event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log("PASSWORD BUTTON CLICKED");
+
+
+    if (passwordInput.type === "password") {
+
+      // SHOW
+      passwordInput.type = "text";
+
+      toggleButton.textContent = "🙈";
+
+      toggleButton.setAttribute(
+        "aria-label",
+        "Hide password"
+      );
+
+      toggleButton.setAttribute(
+        "title",
+        "Hide password"
+      );
+
+      console.log("Password type:", passwordInput.type);
+
+    } else {
+
+      // HIDE
+      passwordInput.type = "password";
+
+      toggleButton.textContent = "👁";
+
+      toggleButton.setAttribute(
+        "aria-label",
+        "Show password"
+      );
+
+      toggleButton.setAttribute(
+        "title",
+        "Show password"
+      );
+
+      console.log("Password type:", passwordInput.type);
+    }
+
+
+    // Keep cursor in password field
+    passwordInput.focus();
+
+  });
+
+});

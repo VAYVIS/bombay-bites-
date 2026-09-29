@@ -1,13 +1,30 @@
-(function () {
+import { supabase } from './supabaseClient.js';
+
+(async function () {
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+
+  const { data: { session } } = await supabase.auth.getSession();
+  let isManager = false;
+
+  if (session) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', session.user.id)
+      .single();
+    isManager = data?.role === 'manager';
+  }
+
   const links = [
     { href: 'dashboard.html', label: '📊 Dashboard' },
     { href: 'menu.html',      label: '🍽️ Menu' },
     { href: 'orders.html',    label: '🧾 Orders' },
-    { href: 'billing.html',   label: '📄 Billing' }
+    { href: 'billing.html',   label: '📄 Billing' },
   ];
-
-  const sidebar = document.getElementById('sidebar');
-  if (!sidebar) return;
+  if (isManager) {
+    links.push({ href: 'staff.html', label: '👥 Staff' });
+  }
 
   const current = location.pathname.split('/').pop();
   const items = links.map(l =>
